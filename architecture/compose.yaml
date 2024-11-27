@@ -1,0 +1,40 @@
+services:
+  academy-jenkins-docker:
+    image: docker:dind
+    hostname: docker
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR/certs
+    volumes:
+      - academy-jenkins-docker-certs:/certs/client
+      - academy-jenkins-data:/var/jenkins_home
+    networks:
+      - academy-jenkins
+    ports:
+      - 2376:2376
+    command: --storage-driver=overlay2
+
+  academy-jenkins-master:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: on-failure
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - academy-jenkins-data:/var/jenkins_home
+      - academy-jenkins-docker-certs:/certs/client:ro
+    networks:
+      - academy-jenkins
+    ports:
+      - 8080:8080
+      - 50000:50000
+
+networks:
+  academy-jenkins:
+
+volumes:
+  academy-jenkins-docker-certs:
+  academy-jenkins-data:
