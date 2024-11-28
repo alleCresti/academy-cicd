@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.479.1-jdk17
+FROM jenkins/jenkins:2.479.2-jdk17
 USER root
 
 RUN apt-get update && apt-get install -y lsb-release jq
@@ -12,4 +12,4 @@ RUN echo "deb [arch=$(dpkg --print-architecture) \
 RUN apt-get update && apt-get install -y docker-ce-cli
 
 USER jenkins
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow"
+RUN jenkins-plugin-cli --plugins "docker-workflow"
