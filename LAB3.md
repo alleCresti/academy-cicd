@@ -1,6 +1,6 @@
 # BASIC PIPELINE
 
-1. Clonare la repository in locale e creare un Jenkinsfile nella root del progetto, il Jenkinsfile deve
+1. Clonare la repository [basic-spring-app](https://github.com/alleCresti/basic-spring-app/tree/main) in locale e creare un Jenkinsfile sul branch main nella root del progetto, il Jenkinsfile deve
    1. Dichiarare maven come tool di compilazione
    2. Compilare e testare il codice
    3. Registrare i risultati dei test
