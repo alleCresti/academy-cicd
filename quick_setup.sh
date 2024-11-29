@@ -38,6 +38,18 @@ info "Installing dnf plugins..."
 sudo dnf -y install dnf-plugins-core
 success "dnf plugins installed."
 
+info "Adding jenkins GPG key"
+sudo wget -O /etc/yum.repos.d/jenkins.repo \
+    https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
+sudo dnf upgrade
+success "done"
+
+info "Installing Jenkins"
+sudo dnf install -y fontconfig java-17-openjdk
+sudo dnf install -y jenkins
+success "done"
+
 info "Adding Docker repository..."
 sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 success "Docker repository added."
@@ -52,15 +64,12 @@ success "Docker service is running."
 
 info "Adding the current user to the Docker group..."
 sudo usermod -aG docker $USER
+sudo usermod -aG docker jenkins
 newgrp docker
 
-info "Cloning the GitHub repository..."
-if ! command -v git &>/dev/null; then
-  error "git is not installed. Please install it before running this script."
-  exit 1
-fi
-git clone https://github.com/alleCresti/academy-cicd.git
-success "GitHub repository cloned."
+info "Enabling and starting Jenkins"
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
 
 success "All steps completed successfully! Your lab is ready!"
 
